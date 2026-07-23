@@ -1,0 +1,126 @@
+/* Page Background */
+/* Full Page Background */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+
+    /* Replace with your own image */
+    background: url("images/travel-bg.jpg") no-repeat center center fixed;
+    background-size: cover;
+
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Dark overlay on background */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: -1;
+}
+
+/* Main Container */
+.container {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    width: 85%;
+    max-width: 650px;
+    text-align: center;
+}
+
+/* Heading */
+h1 {
+    color: #00695c;
+    font-size: 38px;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Description */
+p {
+    color: #444;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* Photo */
+img {
+    width: 100%;
+    max-width: 550px;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 15px;
+    border: 4px solid white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    transition: 0.4s;
+}
+
+img:hover {
+    transform: scale(1.03);
+}
+
+/* Buttons */
+button {
+    background: linear-gradient(45deg, #00897b, #43a047);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    margin: 12px;
+    font-size: 17px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+button:active {
+    transform: scale(0.96);
+}
+
+/* Popup */
+.popup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+}
+
+.popup-content {
+    background: white;
+    width: 350px;
+    margin: 10% auto;
+    padding: 25px;
+    border-radius: 15px;
+    animation: popup 0.5s ease;
+}
+
+.close {
+    float: right;
+    font-size: 28px;
+    color: red;
+    cursor: pointer;
+}
+
+@keyframes popup {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
