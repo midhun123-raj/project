@@ -1,18 +1,37 @@
-/* Page Background */
-/* Full Page Background */
+/* Enable Custom Cursor only on Desktop/Pointed devices */
+@media (pointer: fine) {
+    body {
+        cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='6' fill='%20%237a52f4' stroke='%23ffffff' stroke-width='2'/%3E%3C/svg%3E") 12 12, auto;
+    }
+
+    button, 
+    a, 
+    img, 
+    .close, 
+    .photo-card button {
+        cursor: url("data:image/svg+xml,%3Csvg width='28' height='28' viewBox='0 0 28 28' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='14' cy='14' r='8' fill='%236c3ce9' stroke='%23ffffff' stroke-width='2.5'/%3E%3Cpath d='M14 2V6M14 22V26M2 14H6M22 14H26' stroke='%237a52f4' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 14 14, pointer !important;
+    }
+
+    img:hover {
+        cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='9' stroke='%23ffffff' stroke-width='2'/%3E%3Cpath d='M12 7V17M7 12H17' stroke='%237a52f4' stroke-width='2'/%3E%3C/svg%3E") 12 12, crosshair !important;
+    }
+}
+
+/* =========================================================
+   PAGE LAYOUT & BACKGROUND
+   ========================================================= */
+
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-
-    /* Replace with your own image */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background: url("images/travel-bg.jpg") no-repeat center center fixed;
     background-size: cover;
-
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
 }
 
 /* Dark overlay on background */
@@ -28,18 +47,19 @@ body::before {
 .container {
     background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
-    padding: 35px;
+    padding: clamp(20px, 5vw, 35px);
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    width: 85%;
+    width: 95%;
     max-width: 650px;
     text-align: center;
+    box-sizing: border-box;
 }
 
 /* Heading */
 h1 {
     color: #00695c;
-    font-size: 38px;
+    font-size: clamp(28px, 6vw, 38px);
     margin-bottom: 10px;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
@@ -47,24 +67,26 @@ h1 {
 /* Description */
 p {
     color: #444;
-    font-size: 18px;
+    font-size: clamp(15px, 3.5vw, 18px);
     line-height: 1.6;
 }
 
 /* Photo */
 img {
     width: 100%;
-    max-width: 550px;
-    height: 350px;
+    max-width: 100%;
+    height: auto;
+    max-height: 350px;
     object-fit: cover;
     border-radius: 15px;
     border: 4px solid white;
     box-shadow: 0 8px 20px rgba(0,0,0,0.4);
     transition: 0.4s;
+    box-sizing: border-box;
 }
 
 img:hover {
-    transform: scale(1.03);
+    transform: scale(1.02);
 }
 
 /* Buttons */
@@ -72,17 +94,18 @@ button {
     background: linear-gradient(45deg, #00897b, #43a047);
     color: white;
     border: none;
-    padding: 12px 28px;
-    margin: 12px;
-    font-size: 17px;
+    padding: 12px 24px;
+    margin: 8px;
+    font-size: 16px;
     border-radius: 30px;
-    cursor: pointer;
     transition: 0.3s;
     font-weight: bold;
+    min-height: 44px;
+    cursor: pointer;
 }
 
 button:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
 
@@ -96,15 +119,20 @@ button:active {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.7);
+    padding: 15px;
+    box-sizing: border-box;
+    z-index: 1000;
 }
 
 .popup-content {
     background: white;
-    width: 350px;
-    margin: 10% auto;
+    width: 100%;
+    max-width: 350px;
+    margin: 15% auto;
     padding: 25px;
     border-radius: 15px;
     animation: popup 0.5s ease;
+    box-sizing: border-box;
 }
 
 .close {
@@ -123,4 +151,108 @@ button:active {
         transform: translateY(0);
         opacity: 1;
     }
+}
+
+.photo-card button {
+    margin-top: 10px;
+    padding: 10px 18px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: background-color 0.3s;
+}
+
+.photo-card button:hover {
+    background-color: #0056b3;
+}
+
+.photo-card a {
+    text-decoration: none;
+}
+
+/* Animation applied during photo switch */
+.fade-slide {
+    animation: fadeSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0.3;
+        transform: translateY(10px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Before/After Splitter */
+.ba-container {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  user-select: none;
+}
+.ba-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+.ba-before {
+  width: 50%;
+  border-right: 2px solid #fff;
+  z-index: 2;
+}
+.ba-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 50%;
+  cursor: ew-resize;
+}
+.ba-label {
+  position: absolute;
+  bottom: 8px;
+  font-size: 10px;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.before-label { left: 8px; z-index: 3; }
+.after-label { right: 8px; z-index: 1; }
+
+/* Action Buttons & Adjuster Panel */
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.adjuster-panel {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+.adjuster-panel.open { display: flex; }
+.control-group {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
 }
