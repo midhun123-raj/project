@@ -3,48 +3,852 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Travel Gallery</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Preset Collection</title>
+    <style>
+        /* Modern reset & deep dark purple page background */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            background: #090314;
+            color: #e2d9f3;
+            padding: 1.5rem 1rem;
+            box-sizing: border-box;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* --- CUSTOM CURSOR STYLING (PC ONLY) --- */
+        @media (pointer: fine) {
+            body, button, a, input, select {
+                cursor: none !important;
+            }
+
+            .custom-cursor {
+                width: 12px;
+                height: 12px;
+                background: #a855f7;
+                border-radius: 50%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                pointer-events: none;
+                z-index: 9999;
+                transform: translate(-50%, -50%);
+                transition: transform 0.05s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
+                box-shadow: 0 0 12px #a855f7, 0 0 20px #a855f7;
+            }
+
+            .cursor-follower {
+                width: 36px;
+                height: 36px;
+                border: 2px solid rgba(168, 85, 247, 0.5);
+                border-radius: 50%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                pointer-events: none;
+                z-index: 9998;
+                transform: translate(-50%, -50%);
+                transition: transform 0.15s ease-out;
+            }
+
+            .cursor-hover .custom-cursor {
+                width: 20px;
+                height: 20px;
+                background: #ec4899;
+                box-shadow: 0 0 15px #ec4899;
+            }
+
+            .cursor-hover .cursor-follower {
+                width: 50px;
+                height: 50px;
+                border-color: rgba(236, 72, 153, 0.6);
+            }
+        }
+
+        /* Hide custom cursors on touch screens */
+        @media (pointer: coarse) {
+            .custom-cursor, .cursor-follower {
+                display: none !important;
+            }
+        }
+
+        /* DARK CONTAINER */
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            background: rgba(22, 13, 38, 0.85);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 24px;
+            padding: clamp(1.2rem, 4vw, 2.5rem);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(16px);
+            box-sizing: border-box;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Top header section styling */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(1.8rem, 5vw, 2.4rem);
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        h1 .dot {
+            color: #a855f7;
+        }
+
+        /* Header Navigation Buttons Wrapper */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        @media (min-width: 640px) {
+            .header-actions {
+                width: auto;
+            }
+        }
+
+        /* Header Buttons Base Style */
+        .btn-nav {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: rgba(168, 85, 247, 0.15);
+            color: #ffffff;
+            border: 1px solid rgba(168, 85, 247, 0.35);
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            min-height: 44px;
+            box-sizing: border-box;
+            flex: 1 1 auto;
+        }
+
+        @media (min-width: 640px) {
+            .btn-nav {
+                flex: none;
+            }
+        }
+
+        .btn-nav:hover {
+            background: rgba(168, 85, 247, 0.35);
+            border-color: rgba(168, 85, 247, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.2);
+        }
+
+        /* LIGHTROOM BUTTON STYLING */
+        .btn-lightroom {
+            background: rgba(49, 168, 255, 0.15);
+            border-color: rgba(49, 168, 255, 0.4);
+            color: #31a8ff;
+        }
+
+        .btn-lightroom:hover {
+            background: rgba(49, 168, 255, 0.35);
+            border-color: rgba(49, 168, 255, 0.7);
+            box-shadow: 0 4px 15px rgba(49, 168, 255, 0.3);
+            color: #ffffff;
+        }
+
+        /* --- SEARCH BAR STYLING --- */
+        .toolbar {
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(33, 19, 56, 0.6);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 10px;
+            padding: 0.65rem 1rem;
+            color: #ffffff;
+            font-size: 0.9rem;
+            outline: none;
+            min-height: 44px;
+            box-sizing: border-box;
+            transition: border-color 0.25s ease, background 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #a855f7;
+        }
+
+        /* --- FULL-WIDTH VERTICAL SCROLLING FEED --- */
+        .gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 1rem 0;
+        }
+
+        /* Individual Vertical Feed Cards */
+        .photo-card {
+            width: 100%;
+            background: rgba(33, 19, 56, 0.9);
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(168, 85, 247, 0.6);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+
+        /* Tall image formatting for top-to-bottom scrolling */
+        .photo-card img {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .card-body {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .photo-card h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        /* --- DOWNLOAD ANALYTICS BADGE --- */
+        .download-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: rgba(168, 85, 247, 0.12);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #d8b4fe;
+            padding: 0.3rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        .download-badge svg {
+            fill: #a855f7;
+        }
+
+        /* --- DUAL DOWNLOAD BUTTON GROUP --- */
+        .download-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            width: 100%;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            color: #ffffff;
+            border: none;
+            padding: 0.75rem 0.5rem;
+            min-height: 44px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+            box-sizing: border-box;
+        }
+
+        .btn-download:hover {
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            box-shadow: 0 6px 20px rgba(168, 85, 247, 0.6);
+        }
+
+        .btn-download-secondary {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            box-shadow: none;
+        }
+
+        .btn-download-secondary:hover {
+            background: rgba(168, 85, 247, 0.35);
+            border-color: rgba(168, 85, 247, 0.7);
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+        }
+
+        /* --- ADMIN DELETE BUTTON STYLING --- */
+        .btn-delete {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(220, 38, 38, 0.85);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 0.4rem 0.6rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        .btn-delete:hover {
+            background: #ef4444;
+            transform: scale(1.05);
+        }
+
+        /* --- MODAL POPUP STYLING --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(9, 3, 20, 0.75);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background: rgba(28, 14, 48, 0.95);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(168, 85, 247, 0.25);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 420px;
+            padding: clamp(1.2rem, 4vw, 2rem);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            box-sizing: border-box;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(168, 85, 247, 0.15);
+            border: none;
+            color: #d8b4fe;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(168, 85, 247, 0.4);
+            color: #ffffff;
+        }
+
+        .modal-title {
+            margin: 0 0 0.25rem 0;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .modal-subtitle {
+            margin: 0 0 1.25rem 0;
+            font-size: 0.85rem;
+            color: #c0a9e0;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            padding: 0.75rem 0.85rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: #f3e8ff;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+
+        .contact-btn {
+            background: rgba(168, 85, 247, 0.25);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            color: #ffffff;
+            padding: 0.4rem 0.8rem;
+            min-height: 36px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-btn:hover {
+            background: #8b5cf6;
+        }
+
+        /* --- TOAST NOTIFICATION STYLING --- */
+        .toast {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translate(-50%, 20px);
+            background: rgba(28, 14, 48, 0.95);
+            border: 1px solid #a855f7;
+            color: #ffffff;
+            padding: 0.8rem 1.4rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 2000;
+            pointer-events: none;
+            text-align: center;
+            width: max-content;
+            max-width: 90vw;
+            box-sizing: border-box;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        /* --- LIGHT THEME OVERRIDES --- */
+        body.light-theme {
+            background: #f3e8ff;
+            color: #1e1035;
+        }
+
+        body.light-theme .container {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(168, 85, 247, 0.3);
+            box-shadow: 0 20px 50px rgba(120, 53, 15, 0.1);
+        }
+
+        body.light-theme h1 {
+            color: #160d26;
+        }
+
+        body.light-theme .search-input {
+            background: rgba(255, 255, 255, 0.9);
+            color: #160d26;
+            border-color: rgba(168, 85, 247, 0.4);
+        }
+
+        body.light-theme .photo-card {
+            background: #ffffff;
+            border-color: rgba(168, 85, 247, 0.2);
+        }
+
+        body.light-theme .photo-card h3 {
+            color: #160d26;
+        }
+
+        body.light-theme .download-badge {
+            background: rgba(168, 85, 247, 0.1);
+            color: #6b21a8;
+            border-color: rgba(168, 85, 247, 0.25);
+        }
+
+        body.light-theme .btn-nav {
+            background: rgba(168, 85, 247, 0.1);
+            color: #581c87;
+        }
+
+        body.light-theme .btn-lightroom {
+            background: rgba(49, 168, 255, 0.15);
+            color: #0284c7;
+        }
+
+        body.light-theme .btn-download-secondary {
+            background: rgba(168, 85, 247, 0.1);
+            color: #6b21a8;
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        body.light-theme .modal-card {
+            background: #ffffff;
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        body.light-theme .modal-title,
+        body.light-theme .contact-info {
+            color: #160d26;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .photo-card, .btn-nav, .btn-download, .modal-overlay, .modal-card {
+                transition: none !important;
+                transform: none !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
+<!-- Custom Pointer Elements -->
+<div class="custom-cursor" id="cursor"></div>
+<div class="cursor-follower" id="follower"></div>
+
 <div class="container">
 
-    <h1>📷 My Travel Gallery</h1>
+    <div class="header-section">
+        <h1>Preset Gallery<span class="dot">.</span></h1>
+        
+        <div class="header-actions">
+            <!-- Smart Lightroom Launch / Download Button -->
+            <button class="btn-nav btn-lightroom" onclick="openOrDownloadLightroom()" title="Open or Download Lightroom">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9.5 11.5c0 .83-.67 1.5-1.5 1.5H6V8h2v5.5h1.5c.83 0 1.5.67 1.5 1.5zm8.5 0c0 .83-.67 1.5-1.5 1.5H13V8h3.5c.83 0 1.5.67 1.5 1.5v5zm-2-1.5v-2.5h-1.5V13H16z"/>
+                </svg>
+                <span>Lightroom</span>
+            </button>
 
-    <a href="index.html">
-        <button>🏠 Home</button>
-    </a>
+            <!-- Hidden Admin Upload Button -->
+            <button class="btn-nav" id="openUploadModal" style="display: none;">&#43; Upload Preset</button>
+            
+            <!-- Theme Toggle Button -->
+            <button class="btn-nav" id="themeToggleBtn" onclick="toggleTheme()">
+                &#9728; Theme
+            </button>
 
-    <div class="gallery">
-
-        <div class="photo-card">
-            <img src="photos/pic1.jpeg" alt="Photo 1">
-            <h3>Sunset Beach</h3>
-            <p>This photo was taken at Kovalam Beach during sunset.</p>
+            <a href="index.html" class="btn-nav">&larr; Home</a>
+            <button class="btn-nav" id="openContactModal">&#9993; Contact</button>
         </div>
-
-        <div class="photo-card">
-            <img src="photos/WhatsApp Image 2026-07-23 at 7.40.12 PM.jpeg" alt="Photo 2">
-            <h3>Mountain View</h3>
-            <p>A beautiful mountain view during my trip.</p>
-        </div>
-
-        <div class="photo-card">
-            <img src="photos/WhatsApp Image 2026-07-23 at 7.40.13 PM (1).jpeg" alt="Photo 3">
-            <h3>Waterfall</h3>
-            <p>A peaceful waterfall surrounded by nature.</p>
-        </div>
-
-        <div class="photo-card">
-            <img src="photos/WhatsApp Image 2026-07-23 at 7.40.13 PM.jpeg" alt="Photo 4">
-            <h3>Forest Trail</h3>
-            <p>A scenic forest trail full of greenery.</p>
-        </div>
-
     </div>
 
+    <!-- Search Bar -->
+    <div class="toolbar">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search presets..." onkeyup="filterPresets()">
+    </div>
+
+    <!-- Vertical Scrolling Feed Container -->
+    <div class="gallery" id="galleryContainer"></div>
+
 </div>
+
+<!-- ADMIN UPLOAD MODAL -->
+<div class="modal-overlay" id="uploadModal">
+    <div class="modal-card">
+        <button class="close-btn" id="closeUploadModal">&times;</button>
+        <h2 class="modal-title">Upload New Preset</h2>
+        <p class="modal-subtitle">Add a new preset in DNG & XMP formats</p>
+
+        <form id="uploadForm" onsubmit="handlePresetUpload(event)">
+            <div style="margin-bottom: 1rem;">
+                <label style="display:block; margin-bottom: 0.3rem; font-size: 0.85rem; color: #c0a9e0;">Title</label>
+                <input type="text" id="presetTitle" class="search-input" placeholder="e.g., Moody Forest" required>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display:block; margin-bottom: 0.3rem; font-size: 0.85rem; color: #c0a9e0;">Preview Image</label>
+                <input type="file" id="presetImage" accept="image/*" class="search-input" required>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display:block; margin-bottom: 0.3rem; font-size: 0.85rem; color: #c0a9e0;">Mobile Preset (.DNG File)</label>
+                <input type="file" id="presetFileDng" accept=".dng" class="search-input" required>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display:block; margin-bottom: 0.3rem; font-size: 0.85rem; color: #c0a9e0;">Desktop Preset (.XMP File)</label>
+                <input type="file" id="presetFileXmp" accept=".xmp" class="search-input">
+            </div>
+
+            <button type="submit" class="btn-download" style="width:100%;">Upload & Save</button>
+        </form>
+    </div>
+</div>
+
+<!-- CONTACT POPUP MODAL -->
+<div class="modal-overlay" id="contactModal">
+    <div class="modal-card">
+        <button class="close-btn" id="closeContactModal">&times;</button>
+        <h2 class="modal-title">Get in Touch</h2>
+        <p class="modal-subtitle">Feel free to reach out via phone or Instagram!</p>
+
+        <div class="contact-item">
+            <div class="contact-info">
+                <span>&#128222;</span>
+                <span id="phoneNumber">7356824150</span>
+            </div>
+            <button class="contact-btn" onclick="copyPhone()">Copy</button>
+        </div>
+
+        <div class="contact-item">
+            <div class="contact-info">
+                <span>&#128248;</span>
+                <span>https://www.instagram.com/framesof.mj</span>
+            </div>
+            <a href="https://www.instagram.com/framesof.mj" target="_blank" class="contact-btn">Visit</a>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast" id="toast">Phone number copied to clipboard!</div>
+
+<script src="script.js"></script>
+
+<script>
+    // Smart Lightroom Launcher & App Store Fallback
+    function openOrDownloadLightroom() {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        const isAndroid = /android/i.test(userAgent);
+        const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+
+        const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.adobe.lrmobile';
+        const appStoreUrl = 'https://apps.apple.com/app/adobe-lightroom-photo-editor/id878783582';
+        const webUrl = 'https://lightroom.adobe.com';
+
+        if (isAndroid) {
+            window.location.href = 'intent://#Intent;scheme=lightroom;package=com.adobe.lrmobile;S.browser_fallback_url=' + encodeURIComponent(playStoreUrl) + ';end';
+        } else if (isIOS) {
+            const startTime = Date.now();
+            window.location.href = 'lightroom://';
+            
+            setTimeout(() => {
+                if (Date.now() - startTime < 2000) {
+                    window.location.href = appStoreUrl;
+                }
+            }, 1500);
+        } else {
+            const startTime = Date.now();
+            window.location.href = 'lightroom://';
+            
+            setTimeout(() => {
+                if (Date.now() - startTime < 2000) {
+                    if (typeof showToast === 'function') {
+                        showToast('Opening Lightroom Web...');
+                    }
+                    window.open(webUrl, '_blank');
+                }
+            }, 1500);
+        }
+    }
+
+    // Contact Modal
+    const modal = document.getElementById('contactModal');
+    const openBtn = document.getElementById('openContactModal');
+    const closeBtn = document.getElementById('closeContactModal');
+
+    openBtn.addEventListener('click', () => {
+        modal.classList.add('active');
+        closeBtn.focus();
+    });
+
+    closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+        openBtn.focus();
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('active');
+    });
+
+    // Admin Upload Modal
+    const uploadModal = document.getElementById('uploadModal');
+    const openUploadBtn = document.getElementById('openUploadModal');
+    const closeUploadBtn = document.getElementById('closeUploadModal');
+
+    if (openUploadBtn) {
+        openUploadBtn.addEventListener('click', () => {
+            uploadModal.classList.add('active');
+            document.getElementById('presetTitle').focus();
+        });
+    }
+
+    if (closeUploadBtn) {
+        closeUploadBtn.addEventListener('click', () => {
+            uploadModal.classList.remove('active');
+        });
+    }
+
+    uploadModal.addEventListener('click', (e) => {
+        if (e.target === uploadModal) uploadModal.classList.remove('active');
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (modal.classList.contains('active')) modal.classList.remove('active');
+            if (uploadModal.classList.contains('active')) uploadModal.classList.remove('active');
+        }
+    });
+
+    // Toast Notification
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.innerText = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // Clipboard Copy
+    function copyPhone() {
+        const phone = document.getElementById('phoneNumber').innerText;
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(phone).then(() => {
+                showToast('Phone number copied to clipboard!');
+            }).catch(() => fallbackCopy(phone));
+        } else {
+            fallbackCopy(phone);
+        }
+    }
+
+    function fallbackCopy(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showToast('Phone number copied to clipboard!');
+        } catch (err) {
+            showToast('Failed to copy. Please copy manually.');
+        }
+        document.body.removeChild(textArea);
+    }
+
+    // Custom Cursor
+    const cursor = document.getElementById('cursor');
+    const follower = document.getElementById('follower');
+
+    if (window.matchMedia('(pointer: fine)').matches) {
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+            follower.style.left = `${e.clientX}px`;
+            follower.style.top = `${e.clientY}px`;
+        });
+
+        document.addEventListener('mouseover', (e) => {
+            if (e.target.closest('a, button, input, select, .photo-card')) {
+                document.body.classList.add('cursor-hover');
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            if (e.target.closest('a, button, input, select, .photo-card')) {
+                document.body.classList.remove('cursor-hover');
+            }
+        });
+    }
+
+    // Theme Switcher
+    function toggleTheme() {
+        document.body.classList.toggle('light-theme');
+        const isLight = document.body.classList.contains('light-theme');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        const themeBtn = document.getElementById('themeToggleBtn');
+        if (themeBtn) themeBtn.innerHTML = isLight ? '&#9790; Dark Mode' : '&#9728; Light Mode';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('theme');
+        const themeBtn = document.getElementById('themeToggleBtn');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-theme');
+            if (themeBtn) themeBtn.innerHTML = '&#9790; Dark Mode';
+        } else {
+            if (themeBtn) themeBtn.innerHTML = '&#9728; Light Mode';
+        }
+    });
+</script>
 
 </body>
 </html>
